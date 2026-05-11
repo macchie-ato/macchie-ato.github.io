@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Clarity Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1916;
+  --ink-2: #4a4844;
+  --ink-3: #8a8880;
+  --paper: #f5f3ee;
+  --paper-2: #eceae4;
+  --paper-3: #e2dfd8;
+  --accent: #c8622a;
+  --accent-light: #f0e8e0;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --max: 680px;
+  --pad: 24px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+/* Layout */
+.page { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+/* Nav */
+nav {
+  border-bottom: 1px solid var(--paper-3);
+  padding: 18px var(--pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 100;
+  max-width: 100%;
+}
+.nav-inner { max-width: var(--max); margin: 0 auto; width: 100%; display: flex; align-items: center; justify-content: space-between; }
+.nav-logo { font-family: var(--serif); font-size: 18px; letter-spacing: -0.02em; }
+.nav-links { display: flex; gap: 24px; }
+.nav-links a { font-size: 13px; color: var(--ink-2); transition: color .15s; }
+.nav-links a:hover { color: var(--ink); }
+
+/* Hero */
+.hero {
+  padding: 80px 0 64px;
+  border-bottom: 1px solid var(--paper-3);
+}
+.hero-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 6vw, 52px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 24px;
+  max-width: 560px;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-sub {
+  font-size: 16px;
+  color: var(--ink-2);
+  max-width: 480px;
+  line-height: 1.7;
+  margin-bottom: 32px;
+}
+.hero-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--paper-3);
+  border-radius: 20px;
+  color: var(--ink-3);
+  background: var(--paper-2);
+}
+
+/* Section */
+section { padding: 64px 0; border-bottom: 1px solid var(--paper-3); }
+section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 32px;
+}
+
+/* About */
+.about-text {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.8;
+  max-width: 560px;
+}
+.about-text p + p { margin-top: 16px; }
+.about-text strong { color: var(--ink); font-weight: 500; }
+
+/* Services */
+.services { display: flex; flex-direction: column; gap: 1px; background: var(--paper-3); border: 1px solid var(--paper-3); border-radius: 12px; overflow: hidden; }
+.service {
+  background: var(--paper);
+  padding: 24px 28px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.service:hover { background: var(--paper-2); }
+.service-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.service-title { font-family: var(--serif); font-size: 20px; letter-spacing: -0.01em; }
+.service-toggle { font-size: 20px; color: var(--ink-3); line-height: 1; user-select: none; transition: transform .2s; flex-shrink: 0; }
+.service.open .service-toggle { transform: rotate(45deg); }
+.service-body {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .3s ease, padding .3s ease;
+}
+.service.open .service-body { max-height: 200px; padding-top: 14px; }
+
+/* Built */
+.built-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .built-grid { grid-template-columns: 1fr; } }
+.built-card {
+  background: var(--paper-2);
+  border: 1px solid var(--paper-3);
+  border-radius: 10px;
+  padding: 20px 22px;
+  transition: border-color .15s, background .15s;
+}
+.built-card:hover { background: var(--paper-3); border-color: var(--ink-3); }
+.built-card-title { font-weight: 500; font-size: 14px; margin-bottom: 6px; color: var(--ink); }
+.built-card-body { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+.built-card-tag {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Case studies */
+.cs-list { display: flex; flex-direction: column; gap: 1px; background: var(--paper-3); border: 1px solid var(--paper-3); border-radius: 12px; overflow: hidden; }
+.cs-item {
+  background: var(--paper);
+  padding: 20px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  transition: background .15s;
+}
+.cs-item:hover { background: var(--paper-2); }
+.cs-item-left { flex: 1; }
+.cs-item-title { font-weight: 500; font-size: 14px; margin-bottom: 3px; }
+.cs-item-meta { font-size: 12px; color: var(--ink-3); }
+.cs-item-status {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.status-live { background: #e8f5e9; color: #2e7d32; }
+.status-wip { background: var(--accent-light); color: var(--accent); }
+.status-draft { background: var(--paper-2); color: var(--ink-3); border: 1px solid var(--paper-3); }
+
+/* Writing */
+.writing-intro { font-size: 15px; color: var(--ink-2); line-height: 1.75; margin-bottom: 24px; max-width: 520px; }
+.writing-links { display: flex; flex-direction: column; gap: 8px; }
+.writing-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-3);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  transition: background .15s, border-color .15s;
+  text-decoration: none;
+}
+.writing-link:hover { background: var(--paper-3); border-color: var(--ink-3); color: var(--ink); }
+.writing-link-icon { font-size: 16px; flex-shrink: 0; }
+
+/* Contact */
+.contact-line { font-family: var(--serif); font-size: clamp(24px, 4vw, 36px); letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.2; }
+.contact-line em { font-style: italic; color: var(--accent); }
+.contact-sub { font-size: 14px; color: var(--ink-2); margin-bottom: 32px; }
+.contact-links { display: flex; gap: 12px; flex-wrap: wrap; }
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--sans);
+  cursor: pointer;
+  transition: all .15s;
+  text-decoration: none;
+}
+.contact-btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+  border: 1px solid var(--ink);
+}
+.contact-btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+.contact-btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--paper-3);
+}
+.contact-btn-secondary:hover { background: var(--paper-2); border-color: var(--ink-3); }
+
+/* Downloads */
+.download-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-2);
+  padding: 10px 16px;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-3);
+  border-radius: 8px;
+  transition: all .15s;
+  margin-top: 24px;
+}
+.download-link:hover { background: var(--paper-3); color: var(--ink); }
+
+/* Footer */
+footer {
+  padding: 24px var(--pad);
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--paper-3);
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow { animation: fadeUp .5s ease both; }
+.hero h1 { animation: fadeUp .5s ease .1s both; }
+.hero-sub { animation: fadeUp .5s ease .2s both; }
+.hero-badge { animation: fadeUp .5s ease .3s both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">Clarity Loop</div>
+    <div class="nav-links">
+      <a href="#about">About</a>
+      <a href="#work">Work</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-eyebrow">Clarity Loop — HR Ops & Automation</div>
+    <h1>I fix the hiring and ops problems your team has been <em>working around</em> for too long.</h1>
+    <p class="hero-sub">If your process is held together with spreadsheets and good intentions — or your ATS is technically set up but nobody trusts it — that's where I come in.</p>
+    <span class="hero-badge">Open to freelance engagements and select full-time roles in TA ops, HR tech, and automation</span>
+  </div>
+
+  <section id="about">
+    <div class="section-label">About</div>
+    <div class="about-text">
+      <p>I've spent 10+ years in talent acquisition and HR ops. Most of that time I've been the person who <strong>automates the manual stuff</strong>, untangles the broken workflows, and makes the data actually usable — not just technically present.</p>
+      <p>Clarity Loop is how I work with teams outside my day job. I'm based in the Philippines and work with clients remotely. I don't take on everything — I take on things I can actually solve well.</p>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="section-label">What I do</div>
+    <div class="services">
+
+      <div class="service" onclick="toggleService(this)">
+        <div class="service-header">
+          <div class="service-title">Recruitment ops and ATS setup</div>
+          <div class="service-toggle">+</div>
+        </div>
+        <div class="service-body">
+          Getting your hiring process to actually run the way it's supposed to — clean stages, consistent data, no more chasing people for updates. I've worked in SmartRecruiters, Greenhouse, and Airtable, and I've migrated systems with 10k+ candidate profiles without losing anyone's data.
+        </div>
+      </div>
+
+      <div class="service" onclick="toggleService(this)">
+        <div class="service-header">
+          <div class="service-title">Workflow automation</div>
+          <div class="service-toggle">+</div>
+        </div>
+        <div class="service-body">
+          If something in your process is done manually every single time, it probably shouldn't be. I build automations using Google Apps Script, Zapier, and API integrations — not just connect-the-dots stuff, but logic that handles edge cases and doesn't break when someone does something unexpected.
+        </div>
+      </div>
+
+      <div class="service" onclick="toggleService(this)">
+        <div class="service-header">
+          <div class="service-title">People analytics and dashboards</div>
+          <div class="service-toggle">+</div>
+        </div>
+        <div class="service-body">
+          Recruitment data that sits in your ATS and never gets looked at is just noise. I turn it into hiring funnel visibility, time-to-fill tracking, and numbers that actually help you make decisions. Looker Studio, Metabase, or whatever you're already using.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="section-label">Some things I've built</div>
+    <div class="built-grid">
+
+      <div class="built-card">
+        <div class="built-card-title">Recruitment KPI dashboard</div>
+        <div class="built-card-body">Looker Studio dashboard tracking time-to-fill, cost-per-hire, and funnel drop-off across four countries. Built for a team that previously pulled these numbers manually every month.</div>
+        <span class="built-card-tag">Looker Studio</span>
+      </div>
+
+      <div class="built-card">
+        <div class="built-card-title">Interviewer load balancer</div>
+        <div class="built-card-body">Metabase tool that distributes interview slots evenly across hiring panels. Stopped three senior managers from being booked into every single process.</div>
+        <span class="built-card-tag">Metabase</span>
+      </div>
+
+      <div class="built-card">
+        <div class="built-card-title">ATS migration — SmartRecruiters</div>
+        <div class="built-card-body">Led the full migration for a 10k+ profile database. Improved time-to-fill by 40% in the first quarter post-launch.</div>
+        <span class="built-card-tag">SmartRecruiters</span>
+      </div>
+
+      <div class="built-card">
+        <div class="built-card-title">Automated pipeline tracker</div>
+        <div class="built-card-body">Airtable + Zapier build that killed the weekly status update meeting. Stakeholders check the board instead.</div>
+        <span class="built-card-tag">Airtable · Zapier</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="case-studies">
+    <div class="section-label">Case studies</div>
+    <div class="cs-list">
+
+      <div class="cs-item">
+        <div class="cs-item-left">
+          <div class="cs-item-title">Reference Check Automation</div>
+          <div class="cs-item-meta">SmartRecruiters · Google Apps Script · Slack · PDF generation</div>
+        </div>
+        <span class="cs-item-status status-wip">Coming soon</span>
+      </div>
+
+      <div class="cs-item">
+        <div class="cs-item-left">
+          <div class="cs-item-title">JD Generator Bot</div>
+          <div class="cs-item-meta">Google Apps Script · Gemini API · Google Docs</div>
+        </div>
+        <span class="cs-item-status status-wip">Coming soon</span>
+      </div>
+
+      <div class="cs-item">
+        <div class="cs-item-left">
+          <div class="cs-item-title">CarouMatch — Candidate scoring architecture</div>
+          <div class="cs-item-meta">SmartRecruiters API · GAS · LiteLLM · Slack</div>
+        </div>
+        <span class="cs-item-status status-draft">In progress</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="writing">
+    <div class="section-label">Documentation and writing</div>
+    <p class="writing-intro">I also write. SOPs, playbooks, process guides — the kind of documentation people actually read and follow. If your team runs on institutional knowledge that lives in one person's head, I can help get it out.</p>
+    <div class="writing-links">
+      <a class="writing-link" href="#">
+        <span class="writing-link-icon">📄</span>
+        PH Recruitment Playbook — Internal SOP
+      </a>
+      <a class="writing-link" href="#">
+        <span class="writing-link-icon">✍️</span>
+        Choosing the Right ATS — SEO blog
+      </a>
+      <a class="writing-link" href="#">
+        <span class="writing-link-icon">📝</span>
+        Writing Remote-Ready Resumes — Career guide
+      </a>
+    </div>
+  </section>
+
+  <section id="contact">
+    <p class="contact-line">Have a problem that fits <em>what I do?</em></p>
+    <p class="contact-sub">No lengthy intake forms, no discovery call decks. Just tell me what's broken.</p>
+    <div class="contact-links">
+      <a class="contact-btn contact-btn-primary" href="mailto:hello@clarityloop.com">
+        hello@clarityloop.com
+      </a>
+      <a class="contact-btn contact-btn-secondary" href="https://linkedin.com/in/chelsea-eusebio" target="_blank" rel="noopener">
+        LinkedIn ↗
+      </a>
+    </div>
+    <a class="download-link" href="#">
+      ↓ Resume PDF
+    </a>
+  </section>
+
+</div>
+
+<footer>
+  © 2026 Clarity Loop · Built by Chelsea
+</footer>
+
+<script>
+function toggleService(el) {
+  el.classList.toggle('open');
+}
+</script>
+
+</body>
+</html>
