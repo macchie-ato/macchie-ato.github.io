@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reference Check Automation — Clarity Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1916;
+  --ink-2: #4a4844;
+  --ink-3: #8a8880;
+  --paper: #f5f3ee;
+  --paper-2: #eceae4;
+  --paper-3: #e2dfd8;
+  --accent: #c8622a;
+  --accent-light: #f0e8e0;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --max: 680px;
+  --pad: 24px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+/* Nav */
+nav {
+  border-bottom: 1px solid var(--paper-3);
+  padding: 18px var(--pad);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 100;
+}
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo { font-family: var(--serif); font-size: 18px; letter-spacing: -0.02em; }
+.nav-back {
+  font-size: 13px;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: color .15s;
+}
+.nav-back:hover { color: var(--ink); }
+
+/* Page */
+.page { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+/* Hero */
+.hero { padding: 64px 0 48px; border-bottom: 1px solid var(--paper-3); }
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.hero-tag {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.hero-tag-plain {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: var(--paper-2);
+  color: var(--ink-3);
+  border: 1px solid var(--paper-3);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(30px, 5vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.hero-sub {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+/* Stack row */
+.stack-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 20px;
+}
+.stack-tag {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--paper-2);
+  border: 1px solid var(--paper-3);
+  color: var(--ink-2);
+}
+
+/* Sections */
+section { padding: 48px 0; border-bottom: 1px solid var(--paper-3); }
+section:last-of-type { border-bottom: none; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin-bottom: 20px;
+}
+
+.body-text {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.8;
+}
+.body-text p + p { margin-top: 16px; }
+.body-text strong { color: var(--ink); font-weight: 500; }
+
+/* Flow steps */
+.steps { display: flex; flex-direction: column; gap: 1px; background: var(--paper-3); border: 1px solid var(--paper-3); border-radius: 12px; overflow: hidden; margin-top: 4px; }
+.step { background: var(--paper); padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start; }
+.step-num {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--accent);
+  min-width: 24px;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+.step-body { flex: 1; }
+.step-title { font-weight: 500; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+.step-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+.step-trigger { font-size: 11px; color: var(--ink-3); margin-top: 4px; font-family: monospace; }
+
+/* Screenshots */
+.screenshots { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+@media (max-width: 520px) { .screenshots { grid-template-columns: 1fr; } }
+.screenshot-card {
+  border: 1px solid var(--paper-3);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--paper-2);
+}
+.screenshot-img {
+  width: 100%;
+  display: block;
+  border-bottom: 1px solid var(--paper-3);
+  background: var(--paper-3);
+}
+.screenshot-img img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+.screenshot-caption {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--ink-3);
+  line-height: 1.5;
+}
+.screenshot-caption strong {
+  display: block;
+  font-weight: 500;
+  color: var(--ink-2);
+  margin-bottom: 2px;
+}
+
+/* Impact block */
+.impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+@media (max-width: 480px) { .impact-grid { grid-template-columns: 1fr; } }
+.impact-card {
+  padding: 20px 22px;
+  border-radius: 10px;
+  border: 1px solid var(--paper-3);
+}
+.impact-card.before { background: var(--paper-2); }
+.impact-card.after { background: var(--accent-light); border-color: #e0c4b0; }
+.impact-label {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: 10px;
+}
+.impact-card.before .impact-label { color: var(--ink-3); }
+.impact-card.after .impact-label { color: var(--accent); }
+.impact-item {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--paper-3);
+}
+.impact-item:last-child { border-bottom: none; padding-bottom: 0; }
+.impact-card.after .impact-item { border-color: #e0c4b0; }
+
+/* Note */
+.note-block {
+  background: var(--paper-2);
+  border-left: 2px solid var(--paper-3);
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin-top: 20px;
+}
+.note-block strong { color: var(--ink); font-weight: 500; }
+
+/* Footer nav */
+.footer-nav {
+  padding: 40px 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--sans);
+  transition: all .15s;
+  border: 1px solid var(--paper-3);
+  color: var(--ink);
+  background: transparent;
+}
+.footer-btn:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.footer-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.footer-btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-meta { animation: fadeUp .4s ease both; }
+.hero h1 { animation: fadeUp .4s ease .08s both; }
+.hero-sub { animation: fadeUp .4s ease .16s both; }
+.stack-row { animation: fadeUp .4s ease .24s both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="https://macchie-ato.github.io">Clarity Loop</a>
+    <a class="nav-back" href="https://macchie-ato.github.io">← Back to portfolio</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="hero-tag">Automation</span>
+      <span class="hero-tag-plain">GAS</span>
+      <span class="hero-tag-plain">Google Workspace</span>
+      <span class="hero-tag-plain">SmartRecruiters</span>
+      <span class="hero-tag-plain">Slack</span>
+    </div>
+    <h1>Reference Check Automation</h1>
+    <p class="hero-sub">End-to-end automation of the reference check process — from candidate submission to recruiter notification. The recruiter triggers it once. Everything else runs itself.</p>
+    <div class="stack-row">
+      <span class="stack-tag">Google Apps Script</span>
+      <span class="stack-tag">Google Sheets</span>
+      <span class="stack-tag">Google Forms</span>
+      <span class="stack-tag">Google Docs</span>
+      <span class="stack-tag">Google Drive</span>
+      <span class="stack-tag">SmartRecruiters</span>
+      <span class="stack-tag">Slack</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-label">The problem</div>
+    <div class="body-text">
+      <p>Reference checks are nobody's favourite part of the hiring process. In most teams the workflow goes like this: recruiter emails the candidate asking for referee details, candidate replies eventually, recruiter emails each referee separately, chases the ones who don't respond, manually copies answers into a spreadsheet, formats a summary doc, and sends it to the hiring manager. Repeat for every hire.</p>
+      <p>It's not complicated work. It's just a lot of steps that all depend on someone remembering to do the next thing. Which means it's slow, inconsistent, and the first thing that gets dropped when a recruiter is juggling five open roles. A process that should take 24–48 hours regularly stretched to a week or more.</p>
+      <p>The data was also inconsistent — different recruiters asked different questions, stored responses differently, and there was no single source of truth. This project automates the whole thing.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">How it works</div>
+    <p class="body-text" style="margin-bottom: 20px;">The workflow runs in five sequential steps. Each one only fires if the previous one completed successfully — nothing runs twice, nothing skips ahead.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Prefill link generation</div>
+          <div class="step-desc">When a recruiter marks a candidate row in the masterlist, the script auto-generates a prefilled Google Form link scoped to that specific candidate. No manual URL construction or copy-pasting.</div>
+          <div class="step-trigger">trigger: onEdit</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Candidate submits referee details</div>
+          <div class="step-desc">The candidate fills in referee names, job titles, and contact details via the form. This replaces the email thread that would normally take two to three days of back-and-forth.</div>
+          <div class="step-trigger">trigger: manual (candidate)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Referee forms go out + responses write back</div>
+          <div class="step-desc">On submission, the system generates a separate prefilled form for each referee and sends it automatically. When referees respond, their answers are verified and written back to the correct row in the masterlist in real time. Separate templates for peer and manager references.</div>
+          <div class="step-trigger">trigger: onFormSubmit</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">PDF report generated</div>
+          <div class="step-desc">Once all referee responses are verified, a formatted PDF is built from a Google Docs template and saved to a structured Drive folder organised by Job ID and candidate name. Only fires after verification — no partial reports.</div>
+          <div class="step-trigger">trigger: time-based or manual</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Recruiter gets notified</div>
+          <div class="step-desc">A Slack DM goes to the requesting recruiter with a direct link to the completed report, candidate name, Job ID, and submission timestamp. Falls back to email if the Slack DM fails.</div>
+          <div class="step-trigger">trigger: after PDF confirmed</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">What it looks like</div>
+    <div class="screenshots">
+      <div class="screenshot-card">
+        <div class="screenshot-img" style="background:#f8f8f8;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid var(--paper-3)">
+          <div style="text-align:center;padding:20px">
+            <div style="font-family:var(--serif);font-size:15px;color:var(--ink);margin-bottom:8px">Peer Reference Check</div>
+            <div style="font-size:12px;color:var(--ink-3);line-height:1.6">Formatted PDF output<br>auto-generated from<br>Google Docs template</div>
+            <div style="margin-top:10px;font-size:11px;background:#fee;color:#c00;padding:3px 8px;border-radius:4px;display:inline-block">test data — redacted</div>
+          </div>
+        </div>
+        <div class="screenshot-caption">
+          <strong>PDF output</strong>
+          Structured reference report saved to Drive, organised by Job ID and candidate. Generated automatically once all responses are verified.
+        </div>
+      </div>
+      <div class="screenshot-card">
+        <div class="screenshot-img" style="background:#fff;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid var(--paper-3)">
+          <div style="text-align:center;padding:20px">
+            <div style="font-size:13px;font-weight:500;color:#1a1a1a;margin-bottom:6px">OnboardMe APP</div>
+            <div style="background:#f0f4ff;border-radius:8px;padding:10px 14px;text-align:left;font-size:12px;color:#333;line-height:1.6;max-width:200px">
+              Your reference check PDF is ready<br><br>
+              <span style="color:#666">Candidate: Jane Doe<br>TA Requestor: —<br>PDF Link: —</span>
+            </div>
+          </div>
+        </div>
+        <div class="screenshot-caption">
+          <strong>Slack notification</strong>
+          Direct message to the requesting recruiter once the PDF is confirmed. Falls back to email if Slack fails.
+        </div>
+      </div>
+      <div class="screenshot-card">
+        <div class="screenshot-img" style="background:#1a1a1a;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid var(--paper-3)">
+          <div style="font-size:11px;color:#aaa;text-align:center;padding:16px;line-height:1.8">
+            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;font-size:10px;color:#888;margin-bottom:8px">
+              <div>Record_ID</div><div>Candidate_ID</div><div>Referee_Name</div><div>Prefilled_Link</div>
+            </div>
+            <div style="font-size:10px;color:#666;text-align:left">Candidate and referee data<br>auto-populated on form submit</div>
+          </div>
+        </div>
+        <div class="screenshot-caption">
+          <strong>Masterlist tracker</strong>
+          Google Sheet that acts as the source of truth. Candidate data, referee details, and prefilled form links all written back automatically.
+        </div>
+      </div>
+      <div class="screenshot-card">
+        <div class="screenshot-img" style="background:#f1f3f4;display:flex;align-items:center;justify-content:center;height:180px;border-bottom:1px solid var(--paper-3)">
+          <div style="text-align:center;padding:16px">
+            <div style="font-size:12px;color:#555;margin-bottom:8px">Ref Checks › _Jane Doe</div>
+            <div style="background:#fff;border-radius:6px;padding:8px 14px;font-size:11px;color:#333;border:1px solid #ddd;display:inline-flex;align-items:center;gap:8px">
+              <span style="background:#d93025;color:#fff;font-size:10px;padding:1px 5px;border-radius:2px">PDF</span>
+              _20250910-2351.pdf
+            </div>
+            <div style="margin-top:6px;font-size:10px;color:#888">10 Sept 2025 · 43 KB</div>
+          </div>
+        </div>
+        <div class="screenshot-caption">
+          <strong>Drive folder structure</strong>
+          Reports saved under Ref Checks → candidate name, named by date-time stamp. Clean, searchable, no manual filing.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Before and after</div>
+    <div class="impact-grid">
+      <div class="impact-card before">
+        <div class="impact-label">Before</div>
+        <div class="impact-item">3–5 days average turnaround</div>
+        <div class="impact-item">Manual emails at every step</div>
+        <div class="impact-item">Recruiter chasing referees</div>
+        <div class="impact-item">Inconsistent question sets</div>
+        <div class="impact-item">No central storage or naming convention</div>
+        <div class="impact-item">Process breaks if recruiter is busy</div>
+      </div>
+      <div class="impact-card after">
+        <div class="impact-label">After</div>
+        <div class="impact-item">Completes in hours, not days</div>
+        <div class="impact-item">Recruiter triggers once, nothing else manual</div>
+        <div class="impact-item">Automated form delivery to referees</div>
+        <div class="impact-item">Consistent output every time</div>
+        <div class="impact-item">Structured Drive filing by Job ID</div>
+        <div class="impact-item">Slack notification when done</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">What it doesn't do yet</div>
+    <div class="body-text">
+      <p>There's no automated chasing built in. If a referee doesn't respond, someone still has to follow up manually. The next version will add time-based reminder emails to non-responding referees at set intervals, with an escalation to the recruiter if there's no response after a second nudge.</p>
+    </div>
+    <div class="note-block">
+      <strong>Want to use this?</strong> The repo includes modular scripts, a config file for your own IDs, and setup instructions. Real credentials have been stripped — you'll need to add your own Sheet ID, Form ID, Folder ID, and Slack bot token via Script Properties.
+    </div>
+  </section>
+
+  <div class="footer-nav">
+    <a class="footer-btn" href="https://macchie-ato.github.io">← Back to portfolio</a>
+    <a class="footer-btn primary" href="https://github.com/macchie-ato/reference-check-automation" target="_blank" rel="noopener">View on GitHub ↗</a>
+  </div>
+
+</div>
+
+</body>
+</html>
