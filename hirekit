@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HireKit — Clarity Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #1a1916;
+  --ink-2: #4a4844;
+  --ink-3: #8a8880;
+  --paper: #f5f3ee;
+  --paper-2: #eceae4;
+  --paper-3: #e2dfd8;
+  --accent: #c8622a;
+  --accent-light: #f0e8e0;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --max: 680px;
+  --pad: 24px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+
+nav {
+  border-bottom: 1px solid var(--paper-3);
+  padding: 18px var(--pad);
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background: var(--paper);
+  z-index: 100;
+}
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav-logo { font-family: var(--serif); font-size: 18px; letter-spacing: -0.02em; }
+.nav-back { font-size: 13px; color: var(--ink-3); display: flex; align-items: center; gap: 6px; transition: color .15s; }
+.nav-back:hover { color: var(--ink); }
+
+.page { max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+
+.hero { padding: 64px 0 48px; border-bottom: 1px solid var(--paper-3); }
+.hero-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+.hero-tag { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: var(--accent-light); color: var(--accent); }
+.hero-tag-plain { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: var(--paper-2); color: var(--ink-3); border: 1px solid var(--paper-3); }
+.hero-tag-team { font-size: 11px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: #e8f0fe; color: #1a56db; }
+.hero h1 { font-family: var(--serif); font-size: clamp(30px, 5vw, 44px); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
+.hero-sub { font-size: 16px; color: var(--ink-2); line-height: 1.7; max-width: 520px; }
+.stack-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px; }
+.stack-tag { font-size: 12px; padding: 3px 10px; border-radius: 6px; background: var(--paper-2); border: 1px solid var(--paper-3); color: var(--ink-2); }
+
+section { padding: 48px 0; border-bottom: 1px solid var(--paper-3); }
+section:last-of-type { border-bottom: none; }
+.section-label { font-size: 11px; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 20px; }
+
+.body-text { font-size: 15px; color: var(--ink-2); line-height: 1.8; }
+.body-text p + p { margin-top: 16px; }
+.body-text strong { color: var(--ink); font-weight: 500; }
+
+.output-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+@media (max-width: 520px) { .output-grid { grid-template-columns: 1fr; } }
+.output-card { background: var(--paper-2); border: 1px solid var(--paper-3); border-radius: 10px; padding: 20px 22px; }
+.output-card-num { font-family: var(--serif); font-size: 24px; color: var(--accent); line-height: 1; margin-bottom: 8px; }
+.output-card-title { font-weight: 500; font-size: 14px; color: var(--ink); margin-bottom: 6px; }
+.output-card-body { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+
+.steps { display: flex; flex-direction: column; gap: 1px; background: var(--paper-3); border: 1px solid var(--paper-3); border-radius: 12px; overflow: hidden; margin-top: 4px; }
+.step { background: var(--paper); padding: 20px 24px; display: flex; gap: 16px; align-items: flex-start; }
+.step-num { font-family: var(--serif); font-size: 18px; color: var(--accent); min-width: 24px; line-height: 1.4; flex-shrink: 0; }
+.step-body { flex: 1; }
+.step-title { font-weight: 500; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
+.step-desc { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
+.step-trigger { font-size: 11px; color: var(--ink-3); margin-top: 4px; font-family: monospace; }
+
+.prompt-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+.prompt-card { background: var(--paper); border: 1px solid var(--paper-3); border-radius: 10px; padding: 20px 24px; }
+.prompt-card-title { font-weight: 500; font-size: 14px; color: var(--ink); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.prompt-card-title-tag { font-size: 10px; font-weight: 500; padding: 2px 8px; border-radius: 4px; background: var(--accent-light); color: var(--accent); }
+.prompt-rules { display: flex; flex-direction: column; gap: 6px; }
+.prompt-rule { font-size: 13px; color: var(--ink-2); line-height: 1.6; padding-left: 14px; position: relative; }
+.prompt-rule::before { content: '—'; position: absolute; left: 0; color: var(--ink-3); }
+
+.impact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px; }
+@media (max-width: 480px) { .impact-grid { grid-template-columns: 1fr; } }
+.impact-card { padding: 20px 22px; border-radius: 10px; border: 1px solid var(--paper-3); }
+.impact-card.before { background: var(--paper-2); }
+.impact-card.after { background: var(--accent-light); border-color: #e0c4b0; }
+.impact-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.impact-card.before .impact-label { color: var(--ink-3); }
+.impact-card.after .impact-label { color: var(--accent); }
+.impact-item { font-size: 13px; color: var(--ink-2); line-height: 1.65; padding: 4px 0; border-bottom: 1px solid var(--paper-3); }
+.impact-item:last-child { border-bottom: none; }
+.impact-card.after .impact-item { border-color: #e0c4b0; }
+
+.role-block { background: var(--paper-2); border: 1px solid var(--paper-3); border-radius: 10px; padding: 20px 24px; margin-top: 4px; }
+.role-block-title { font-weight: 500; font-size: 14px; color: var(--ink); margin-bottom: 10px; }
+.role-items { display: flex; flex-direction: column; gap: 8px; }
+.role-item { font-size: 13px; color: var(--ink-2); line-height: 1.6; padding-left: 14px; position: relative; }
+.role-item::before { content: '—'; position: absolute; left: 0; color: var(--ink-3); }
+
+.note-block { background: var(--paper-2); border-left: 2px solid var(--paper-3); border-radius: 0 8px 8px 0; padding: 14px 18px; font-size: 13px; color: var(--ink-2); line-height: 1.7; margin-top: 20px; }
+.note-block strong { color: var(--ink); font-weight: 500; }
+
+.footer-nav { padding: 40px 0 60px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+.footer-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: var(--sans); transition: all .15s; border: 1px solid var(--paper-3); color: var(--ink); background: transparent; }
+.footer-btn:hover { background: var(--paper-2); border-color: var(--ink-3); }
+.footer-btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.footer-btn.primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.hero-meta { animation: fadeUp .4s ease both; }
+.hero h1 { animation: fadeUp .4s ease .08s both; }
+.hero-sub { animation: fadeUp .4s ease .16s both; }
+.stack-row { animation: fadeUp .4s ease .24s both; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="https://macchie-ato.github.io">Clarity Loop</a>
+    <a class="nav-back" href="https://macchie-ato.github.io">← Back to portfolio</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div class="hero">
+    <div class="hero-meta">
+      <span class="hero-tag">Automation</span>
+      <span class="hero-tag-team">Team project</span>
+      <span class="hero-tag-plain">GAS</span>
+      <span class="hero-tag-plain">Gemini API</span>
+      <span class="hero-tag-plain">Google Workspace</span>
+    </div>
+    <h1>HireKit</h1>
+    <p class="hero-sub">A team-built tool that turns one Google Form submission into a complete hiring kit — job description, interview loop, interview questions, and TA sourcing notes — in under a minute.</p>
+    <div class="stack-row">
+      <span class="stack-tag">Google Apps Script</span>
+      <span class="stack-tag">Google Forms + Sheets</span>
+      <span class="stack-tag">Google Docs + Drive</span>
+      <span class="stack-tag">Gemini via LiteLLM</span>
+      <span class="stack-tag">Gmail</span>
+    </div>
+  </div>
+
+  <section>
+    <div class="section-label">The problem</div>
+    <div class="body-text">
+      <p>JD quality and interview preparation in our TA function varied depending on who wrote them, how much time they had, and how well the intake conversation went. Writing a JD from scratch could take days. Interview questions were built inconsistently. Sourcing approaches weren't documented. The output depended too much on the individual.</p>
+      <p>HireKit was a team effort to solve that inconsistency problem — to standardise the starting point without removing the recruiter from the process. TA still owns the intake, the relationship, and the final JD. HireKit removes the blank-page problem and gives the team a consistent, structured foundation to work from every time.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">What it produces</div>
+    <p class="body-text" style="margin-bottom:20px">One form submission. One Google Doc. Everything the TA team needs to start a new hire process.</p>
+    <div class="output-grid">
+      <div class="output-card">
+        <div class="output-card-num">01</div>
+        <div class="output-card-title">Full job description</div>
+        <div class="output-card-body">About the Role, What You Will Do, What You Will Need, Work Arrangement — written in job ad tone, adjusted to the job level, with AI expectations embedded naturally.</div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-num">02</div>
+        <div class="output-card-title">Interview loop table</div>
+        <div class="output-card-body">4 rounds pre-filled with suggested interviewers, focus areas, and format. Recruiter → HM → Cross-functional → Senior leader. Editable before use.</div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-num">03</div>
+        <div class="output-card-title">Interview question guide</div>
+        <div class="output-card-body">Three sections: Hiring Manager questions, AI Capabilities and Mindset, Culture and Collaboration. Tailored to role and seniority. Conversational, not textbook.</div>
+      </div>
+      <div class="output-card">
+        <div class="output-card-num">04</div>
+        <div class="output-card-title">TA sourcing notes</div>
+        <div class="output-card-body">Internal only — not shared with the HM. Suggested talent pools, search titles, and candidate considerations. Fully dynamic based on role, level, market, and brand.</div>
+      </div>
+    </div>
+    <div class="note-block" style="margin-top:12px">The doc is automatically named, moved to the correct brand folder in Drive, shared with the HM and TA Partner, and an email notification goes out with the link. Brand boilerplate is selected automatically based on the HM's input.</div>
+  </section>
+
+  <section>
+    <div class="section-label">How it works</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">HM submits the form</div>
+          <div class="step-desc">The Hiring Manager fills in one Google Form — job title, level, location, brand, responsibilities, must-haves, and a few fields that shape the AI output. Once submitted, they're done.</div>
+          <div class="step-trigger">trigger: onFormSubmit → handleFormSubmit()</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Three AI calls are made</div>
+          <div class="step-desc">The script sends the HM's inputs to Gemini via LiteLLM three times — once for the JD, once for interview questions, once for TA sourcing notes. Each call uses a detailed prompt encoding the recruiting logic: tone rules, seniority logic, scope inference, formatting constraints, and AI-first mandates.</div>
+          <div class="step-trigger">model: gemini-2.5-flash-lite · max tokens: 900 per call</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Google Doc is assembled</div>
+          <div class="step-desc">A new Doc is created, named by job title, country, and date. Brand boilerplate is added first, then the JD, interview loop table, interview questions, intake placeholder, and sourcing notes — all formatted and structured by the script. No manual cleanup needed.</div>
+          <div class="step-trigger">output: one structured Google Doc per submission</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Sharing, email, and logging</div>
+          <div class="step-desc">The doc moves to the correct brand folder, gets shared with the HM and TA Partner as editors, and an email goes out with the document link. Three log tabs are written to automatically: automation logs, LLM output review by job level and function, and debug logs for troubleshooting.</div>
+          <div class="step-trigger">logs: JD_Automation_Logs · LLM_Review_By_JobLevel_Function · JD_Debug_Logs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">The prompts — where the work actually happened</div>
+    <div class="body-text" style="margin-bottom:20px">
+      <p>The code is plumbing. The prompts are the product. Most of the build time went into encoding recruiting expertise into instructions precise enough for the AI to follow consistently.</p>
+    </div>
+    <div class="prompt-list">
+      <div class="prompt-card">
+        <div class="prompt-card-title">JD prompt <span class="prompt-card-title-tag">Most iterations</span></div>
+        <div class="prompt-rules">
+          <div class="prompt-rule">Write like a job ad, not an HR policy — no jargon, varied sentence starters, short active lines</div>
+          <div class="prompt-rule">Adjust tone and scope based on job level — JL2 is execution-focused, JL6+ is strategic and cross-functional</div>
+          <div class="prompt-rule">Infer group vs market scope from role context, not just location</div>
+          <div class="prompt-rule">Include exactly one AI-related line in responsibilities and one in requirements, written naturally</div>
+          <div class="prompt-rule">Plain text output only — specific headings, no markdown, short pseudo-bullet lines</div>
+        </div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-card-title">Interview question prompt</div>
+        <div class="prompt-rules">
+          <div class="prompt-rule">Three sections: Hiring Manager questions, AI Capabilities and Mindset, Culture and Collaboration</div>
+          <div class="prompt-rule">Conversational questions — not textbook competency-framework language</div>
+          <div class="prompt-rule">Senior roles get harder questions on strategic judgement and stakeholder influence</div>
+        </div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-card-title">TA sourcing notes prompt</div>
+        <div class="prompt-rules">
+          <div class="prompt-rule">Fully dynamic — uses the role's function, level, market, and brand to produce relevant suggestions</div>
+          <div class="prompt-rule">Outputs realistic talent pools, search titles, and candidate considerations in sentence form</div>
+          <div class="prompt-rule">No static templates or memorised lists — everything generated from the role context</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Before and after</div>
+    <div class="impact-grid">
+      <div class="impact-card before">
+        <div class="impact-label">Before</div>
+        <div class="impact-item">JDs written from scratch per recruiter</div>
+        <div class="impact-item">Inconsistent quality and format</div>
+        <div class="impact-item">2–3 days average to produce a full hiring kit</div>
+        <div class="impact-item">Interview questions built ad hoc</div>
+        <div class="impact-item">Sourcing approach not documented</div>
+        <div class="impact-item">Output depended on who had time</div>
+      </div>
+      <div class="impact-card after">
+        <div class="impact-label">After</div>
+        <div class="impact-item">Standardised starting point for every role</div>
+        <div class="impact-item">Consistent format across all brands and levels</div>
+        <div class="impact-item">Full hiring kit ready in under a minute</div>
+        <div class="impact-item">Interview questions tailored to role and seniority</div>
+        <div class="impact-item">Sourcing notes generated per role automatically</div>
+        <div class="impact-item">TA reviewing and refining, not writing from scratch</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">My role on the team</div>
+    <div class="body-text" style="margin-bottom:20px">
+      <p>HireKit was a collaborative build. The script architecture, LiteLLM integration, and document assembly logic were a team effort. My focus was on the parts that required recruiting domain knowledge.</p>
+    </div>
+    <div class="role-block">
+      <div class="role-block-title">What I worked on</div>
+      <div class="role-items">
+        <div class="role-item">Prompt refinement — testing and iterating the JD, interview question, and sourcing note prompts across different job levels and functions</div>
+        <div class="role-item">End-to-end testing — running the full workflow with real form inputs and reviewing output quality across edge cases</div>
+        <div class="role-item">User acceptance testing with hiring managers — running structured sessions with HMs as the primary users, gathering feedback, and translating it into prompt or flow improvements</div>
+        <div class="role-item">Seniority and scope logic — defining and refining the rules for how the AI should adjust tone, depth, and scope based on job level and role type</div>
+        <div class="role-item">Iteration tracking — documenting what changed between prompt versions and why, to maintain a clear record of what worked and what didn't</div>
+      </div>
+    </div>
+    <div class="note-block">The hardest part of building HireKit wasn't the code — it was figuring out what a good JD actually looks like and writing it down precisely enough for an AI to follow. That's where recruiting expertise turned into a technical input.</div>
+  </section>
+
+  <section>
+    <div class="section-label">Honest limitations</div>
+    <div class="body-text">
+      <p>AI output isn't always right on the first run — especially for niche or very senior roles. TA review is still essential. Output quality also depends on how well the HM fills in the form; a vague brief produces a vague JD.</p>
+      <p>Each AI call is capped at 900 tokens, which can truncate output for complex roles. There's no automated validation to catch incomplete form submissions before the bot runs — that's still a human check.</p>
+    </div>
+  </section>
+
+  <div class="footer-nav">
+    <a class="footer-btn" href="https://macchie-ato.github.io">← Back to portfolio</a>
+    <a class="footer-btn primary" href="https://github.com/macchie-ato/hirekit" target="_blank" rel="noopener">View on GitHub ↗</a>
+  </div>
+
+</div>
+
+</body>
+</html>
